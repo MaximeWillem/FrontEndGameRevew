@@ -1,6 +1,4 @@
-// Importez les modules nécessaires
 import React from 'react';
-
 // Composant Game
 function Game({ game }) {
   const openGameReview = () => {
@@ -10,7 +8,7 @@ function Game({ game }) {
   return (
     <div className="card h-100" style={{ opacity: 0.9, backgroundColor: 'rgba(169, 169, 169, 0.5)', border: '1px solid white' }}>
       <div onClick={openGameReview} style={{ cursor: 'pointer' }}>
-        <img src={game.image} className="card-img-top" alt={game.image} />
+        <img src={game.images} className="card-img-top" alt={game.images} />
       </div>
 
       <div className="card-body">

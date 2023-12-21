@@ -1,31 +1,38 @@
-// gamereview.js
-import React from 'react';
+// GameReview.js
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ListGame from '../components/listGame'; // Importez le composant ListGame
-import stylesDetail from '../styles/details.module.css'; 
+import axios from 'axios';
+import stylesDetail from '../styles/details.module.css';
 
 const GameReview = () => {
   const { id } = useParams();
-  const gameList = ListGame.props.gameList; // Accédez à la propriété gameList du composant ListGame
-  const game = gameList.find((g) => g.id.toString() === id);
+  const [game, setGame] = useState(null);
+
+  useEffect(() => {
+    // Utilisez useEffect pour effectuer la requête une fois que le composant est monté
+    axios.get(`https://backend-y8vx.onrender.com/game/${id}`)
+      .then(response => {
+        setGame(response.data);
+      })
+      .catch(error => {
+        console.error('Une erreur s\'est produite lors de la récupération des données:', error);
+      });
+  }, [id]); // Assurez-vous de recharger les données lorsque l'ID change
 
   if (!game) {
-    return <div>Erreur : jeu non trouvé</div>;
+    return <div>Chargement...</div>;
   }
 
   return (
-    <div style={{ display: 'flex', textAlign:'center' }} className={stylesDetail['background']}>
+    <div style={{ display: 'flex', textAlign: 'center' }} className={stylesDetail['background']}>
       <div style={{ flex: 3, padding: '20px' }}>
-        {/* Côté gauche (75%) */}
         <h1 style={{ color: '#fff', textTransform: 'uppercase' }}>{game.name}</h1>
 
-        <img src={game.image} alt={game.name.toUpperCase()} style={{ width: '500px', height: '500px' }} />
+        <img src={game.images} alt={game.name.toUpperCase()} style={{ width: '500px', height: '500px' }} />
         <h2 style={{ color: '#fff' }}>Description du jeu : </h2>
         <p style={{ color: '#fff', fontSize: '21px' }}>{game.description}</p>
-        {/* Ajoutez des détails supplémentaires au besoin */}
       </div>
       <div style={{ flex: 1, padding: '20px'} }>
-        {/* Liste des commentaires */}
         <div style={{ position: 'fixed', bottom: 25 }}>
           <input type="text" placeholder="Ajouter un commentaire" required style={{ width:'300px' }} />
           <input type="submit"  value="send" style={{ marginLeft: 3 }}/>
